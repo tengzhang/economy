@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webexam.mapper.StudentMapper">
+
+    <select id="insertForList" parameterType="list">
+        INSERT INTO t_student_subject(`student_id`, `subject_code`, `subject_name`, `is_pay`, `pay_time`, `score`, `is_show_score`)
+        VALUES
+        <trim suffixOverrides=",">
+            <foreach collection="list" item="subject" separator="," >
+                (#{subject.studentId},  #{subject.subjectCode}, #{subject.subjectName}, #{subject.isPay}, #{subject.payTime}, #{subject.score}, #{subject.isShowScore})
+            </foreach>
+        </trim>
+    </select>
+
+    <select id="queryByPage" resultType="Student">
+        SELECT `id` AS id,
+                `exam_no` AS examNo,
+                `id_no` AS idNo,
+                `name` AS name,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `school_name` AS schoolName
+        FROM `t_student`
+        ORDER BY `major_code` ASC, `exam_no` ASC
+        LIMIT #{pCurrent}, #{pSize}
+    </select>
+
+    <select id="queryExportByMajor" resultType="StudentBatchDto">
+        SELECT stu.`exam_no` AS examNo,
+                stu.`name` AS name,
+                stu.`id_no` AS idNo,
+                stu.`major_code` AS majorCode,
+                stu.`major_name` AS majorName,
+                sub.`subject_code` AS subjectCode,
+                sub.`subject_name` AS subjectName,
+                sub.`is_pay` AS isPay,
+                sub.`pay_time` AS payTime,
+                sub.`score` AS score,
+                sub.`is_show_score` AS isShowScore
+        FROM `t_student` stu, `t_student_subject` sub
+        WHERE stu.`id` = sub.`student_id` AND stu.`major_code` = #{majorCode}
+        ORDER BY stu.`major_code`, stu.`exam_no`, sub.`subject_code`
+    </select>
+
+    <select id="queryDtoById" resultMap="studentDtoMap">
+        SELECT stu.`id` AS student_id,
+                stu.`exam_no` AS exam_no,
+                stu.`id_no` AS id_no,
+                stu.`name` AS name,
+                stu.`major_code` AS major_code,
+                stu.`major_name` AS major_name,
+                stu.`school_name` AS school_name,
+                sub.`id` AS subject_id,
+                sub.`subject_code` AS subject_code,
+                sub.`subject_name` AS subject_name,
+                sub.`is_pay` AS is_pay,
+                sub.`pay_time` AS pay_time,
+                sub.`score` AS score,
+                sub.`is_show_score` AS is_show_score
+        FROM `t_student` stu LEFT JOIN `t_student_subject` sub ON stu.`id` = sub.`student_id`
+        WHERE stu.`id` = #{id}
+        ORDER BY sub.`subject_code`
+    </select>
+
+    <select id="queryBySearch" resultType="Student">
+        SELECT `id` AS id,
+                `exam_no` AS examNo,
+                `id_no` AS idNo,
+                `name` AS name,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `school_name` AS schoolName
+        FROM `t_student`
+        WHERE `exam_no` = #{search} OR `name` = #{search}
+    </select>
+
+    <select id="queryByMajor" resultType="Student">
+        SELECT `id` AS id,
+                `exam_no` AS examNo,
+                `id_no` AS idNo,
+                `name` AS name,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `school_name` AS schoolName
+        FROM `t_student`
+        WHERE `major_code` = #{majorCode}
+    </select>
+
+    <delete id="delSubjectByStudentId">
+        DELETE FROM `t_student_subject`
+        WHERE `student_id` = #{sid}
+    </delete>
+
+    <select id="login" resultType="Student">
+        SELECT `id` AS id,
+                `exam_no` AS examNo,
+                `id_no` AS idNo,
+                `name` AS name,
+                `major_code` AS majorCode,
+	            `major_name` AS majorName,
+	            `school_name` AS schoolName
+        FROM `t_student`
+        WHERE `exam_no` = #{examNo} AND `name` = #{name} AND `major_code` = #{majorCode}
+    </select>
+
+    <select id="queryExamById" resultType="WebExam">
+        <![CDATA[
+        SELECT exam.`major_code` as majorCode,
+        exam.`major_name` AS majorName,
+        exam.`subject_code` AS subjectCode,
+        exam.`subject_name` AS subjectName,
+        exam.`start_time` AS startTime,
+        exam.`end_time` AS endTime,
+        exam.`exam_time` AS examTime
+        FROM `t_web_exam` exam LEFT JOIN `t_student_subject` sub ON exam.`subject_code` = sub.`subject_code`
+        WHERE sub.`student_id` = #{studentId}
+        AND exam.`major_code` = #{majorCode}
+        AND sub.`is_pay` = 1
+        AND exam.start_time < #{time}
+        AND exam.end_time > #{time}
+        ]]>
+    </select>
+
+    <select id="querySubjectBySidAndSubject" resultType="StudentSubject">
+        SELECT `id` AS id,
+                `student_id` AS studentId,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `is_pay` AS isPay,
+                `pay_time` AS payTime,
+                `score` AS score,
+                `is_show_score` AS isShowScore
+        FROM `t_student_subject`
+        WHERE `student_id` = #{studentId} AND `subject_code` = #{subjectCode}
+    </select>
+
+    <select id="queryCountByExamNo" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_student`
+        WHERE `exam_no` = #{examNo}
+    </select>
+
+    <resultMap id="studentDtoMap" type="StudentDto">
+        <id property="id" column="student_id" />
+        <association property="student" javaType="Student">
+            <id property="id" column="student_id" />
+            <result property="examNo" column="exam_no" />
+            <result property="idNo" column="id_no" />
+            <result property="name" column="name" />
+            <result property="majorCode" column="major_code" />
+            <result property="majorName" column="major_name" />
+            <result property="schoolName" column="school_name" />
+        </association>
+        <collection property="subjectList" javaType="ArrayList" ofType="StudentSubject">
+            <id property="id" column="subject_id" />
+            <result property="studentId" column="student_id" />
+            <result property="subjectCode" column="subject_code" />
+            <result property="subjectName" column="subject_name" />
+            <result property="isPay" column="is_pay" />
+            <result property="payTime" column="pay_time" />
+            <result property="score" column="score" />
+            <result property="isShowScore" column="is_show_score" />
+        </collection>
+    </resultMap>
+</mapper>

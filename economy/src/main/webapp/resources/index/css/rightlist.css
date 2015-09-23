@@ -1,0 +1,13 @@
+/*左边导航的样式*/
+.comment li{
+    clear: both;
+}
+.comment li.headline{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+.tag-box.tag-box-v3 > .headline{
+	margin-bottom: 0px;
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName" default-lazy-init="false">
+
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath*:/jdbc.properties"/>
+
+    <tx:annotation-driven></tx:annotation-driven>
+
+    <bean id="abstractDataSource" abstract="true" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${driver}"/>
+        <property name="idleConnectionTestPeriod" value="60"/>
+        <property name="idleMaxAge" value="240"/>
+        <property name="maxConnectionsPerPartition" value="30"/>
+        <property name="minConnectionsPerPartition" value="10"/>
+        <property name="partitionCount" value="3"/>
+        <property name="acquireIncrement" value="5"/>
+        <property name="statementCacheSize" value="100"/>
+        <property name="releaseHelperThreads" value="3"/>
+    </bean>
+
+    <!--for development can be replace by mutiDataSource-->
+    <bean id="dataSource" parent="abstractDataSource">
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="jdbcUrl"
+                  value="${jdbcUrl}"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="com.pandawork.core.dao.mybatis.SqlSessionFactoryBean">
+        <!-- db datasource -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 实体目录 -->
+        <property name="typeAliasesPackage" value="com.economy.common.entity,com.economy.common.dto"/>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:com/economy/mapper/**/*mapper.xml</value>
+            </list>
+        </property>
+        <property name="useTag" value="true"/>
+    </bean>
+
+    <bean id="sqlSessionTemplate" class="com.pandawork.core.dao.mybatis.dataBaseSharing.template.RWSqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="mapper" class="com.pandawork.core.dao.mybatis.dataBaseSharing.template.RWMapperScannerConfigurer">
+        <property name="basePackage" value="com.economy.mapper"></property>
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate"></property>
+    </bean>
+
+</beans>

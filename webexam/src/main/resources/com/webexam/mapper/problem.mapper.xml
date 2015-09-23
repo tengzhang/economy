@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webexam.mapper.ProblemMapper">
+
+    <insert id="insertForList" parameterType="list">
+        INSERT t_problem(`major_code`, `major_name`, `subject_code`, `subject_name`, `type`, `title`,
+		                `score`, `choose_a`, `choose_b`, `choose_c`, `choose_d`, `choose_e`, `answer`)
+		VALUES
+		<trim suffixOverrides=",">
+            <foreach collection="list" item="problem" separator=",">
+                (#{problem.majorCode}, #{problem.majorName}, #{problem.subjectCode}, #{problem.subjectName}, #{problem.type}, #{problem.title},
+                #{problem.score}, #{problem.chooseA}, #{problem.chooseB}, #{problem.chooseC}, #{problem.chooseD}, #{problem.chooseE}, #{problem.answer})
+            </foreach>
+		</trim>
+    </insert>
+
+    <select id="queryAll" resultType="Problem">
+        SELECT `id` AS id,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `type` AS type,
+                `title` AS title,
+                `score` AS score,
+                `choose_a` AS chooseA,
+                `choose_b` AS chooseB,
+                `choose_c` AS chooseC,
+                `choose_d` AS chooseD,
+                `choose_e` AS chooseE,
+                `answer` AS answer
+        FROM `t_problem`
+        ORDER BY `major_code`, `subject_code`, `type`
+    </select>
+
+    <select id="queryByPage" resultType="Problem">
+        SELECT `id` AS id,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `type` AS type,
+                `title` AS title,
+                `score` AS score,
+                `choose_a` AS chooseA,
+                `choose_b` AS chooseB,
+                `choose_c` AS chooseC,
+                `choose_d` AS chooseD,
+                `choose_e` AS chooseE,
+                `answer` AS answer
+        FROM `t_problem`
+        ORDER BY `major_code`, `subject_code`, `type`
+        LIMIT #{pCurrent}, #{pSize}
+    </select>
+
+    <select id="queryByMajorAndSubject" resultType="Problem">
+        SELECT `id` AS id,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `type` AS type,
+                `title` AS title,
+                `score` AS score,
+                `choose_a` AS chooseA,
+                `choose_b` AS chooseB,
+                `choose_c` AS chooseC,
+                `choose_d` AS chooseD,
+                `choose_e` AS chooseE,
+                `answer` AS answer
+        FROM `t_problem`
+        WHERE `major_code` = #{majorCode} AND `subject_code` = #{subjectCode}
+        ORDER BY `type`
+    </select>
+
+    <select id="queryDistinctProblem" resultType="Problem">
+        SELECT  DISTINCT
+            `major_code` AS majorCode,
+            `major_name` AS majorName,
+            `subject_code` AS subjectCode,
+            `subject_name` AS subjectName
+        FROM `t_problem`
+    </select>
+
+    <delete id="deleteByMajorAndSubject">
+        DELETE FROM `t_problem` WHERE `major_code` = #{majorCode} AND `subject_code` = #{subjectCode}
+    </delete>
+
+    <delete id="deleteByTitle">
+        DELETE FROM `t_problem` WHERE `title` = #{title}
+    </delete>
+</mapper>

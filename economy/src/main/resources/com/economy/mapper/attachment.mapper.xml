@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.economy.mapper.AttachmentMapper">
+
+    <select id="queryByArticleId" resultType="Attachment">
+        SELECT `id` AS id,
+                `article_id` AS articleId,
+                `name` AS NAME,
+                `file_path` AS filePath
+        FROM `t_attachment`
+        WHERE `article_id` = #{articleId}
+    </select>
+
+    <delete id="deleteByArticleId">
+        DELETE FROM `t_attachment` WHERE `article_id` = #{articleId}
+    </delete>
+</mapper>

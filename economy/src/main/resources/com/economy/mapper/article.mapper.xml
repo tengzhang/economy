@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.economy.mapper.ArticleMapper">
+
+    <select id="queryCountByCondition" resultType="int">
+        SELECT COUNT(1) FROM `t_article`
+        WHERE `type` = #{type}
+        <if test="search != null">
+            AND `index_module_id` = #{search}
+        </if>
+    </select>
+
+    <select id="queryByCondition" resultType="Article">
+        SELECT `id` AS id,
+                `index_module_id` AS indexModuleId,
+                `index_module_name` AS indexModuleName,
+                `title` AS title,
+                `content` AS content,
+                `public_time` AS publicTime,
+                `type` AS type,
+                `has_attachment` AS hasAttachment
+        FROM `t_article`
+        WHERE `type` = #{type}
+        <if test="search != null">
+            AND `index_module_id` = #{search}
+        </if>
+		ORDER BY `id` DESC
+        LIMIT #{pCurrent}, #{pSize}
+    </select>
+</mapper>

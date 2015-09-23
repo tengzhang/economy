@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.economy.mapper.CommonFileMapper">
+
+    <select id="queryCountByCondition" resultType="int">
+        SELECT COUNT(1) FROM `t_common_file`
+        <if test="search != null">
+            WHERE `index_module_id` = #{search}
+        </if>
+    </select>
+
+    <select id="queryByCondition" resultType="CommonFile">
+        SELECT `id` AS id,
+                `index_module_id` AS indexModuleId,
+                `index_module_name` AS indexModuleName,
+                `name` AS NAME,
+                `path` AS path
+        FROM `t_common_file`
+        <if test="search != null">
+            WHERE `index_module_id` = #{search}
+        </if>
+        LIMIT #{pCurrent}, #{pSize}
+    </select>
+</mapper>

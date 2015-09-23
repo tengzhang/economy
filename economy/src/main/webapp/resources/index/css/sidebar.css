@@ -1,0 +1,29 @@
+/*左边导航的样式*/
+.content{
+    margin-left: -10px;
+}
+.content li blockquote{
+    border-left: 5px solid #EEEEEE;
+    margin: 0px;
+    padding: 10px 20px;
+}
+.content li:first-child blockquote{
+    border-left: 5px solid #EEEEEE;
+    margin: 10px 0 0 0;
+    padding: 10px 20px;
+}
+.content li blockquote:hover{
+    border-left: 5px solid #3498db;
+}
+.content li blockquote.active{
+    border-left: 5px solid #3498db;
+}
+.blog-twitter-inner h4{
+    cursor: pointer;
+}
+.blog-twitter-inner ul.content.active{
+    display: block;
+}
+.blog-twitter-inner ul.content{
+    display: none;
+}

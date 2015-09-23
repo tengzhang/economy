@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.economy.mapper.CertificateMapper">
+
+    <select id="queryByIndexModuleId" resultType="Certificate">
+        SELECT `id` AS id,
+                `index_module_id` AS indexModuleId,
+                `index_module_name` AS indexModuleName,
+                `name` AS name,
+                `img_path` AS imgPath,
+                `public_time` AS publicTime
+        FROM `t_certificate`
+        WHERE `index_module_id` = #{indexModuleId}
+    </select>
+
+    <select id="queryAll" resultType="Certificate">
+        SELECT `id` AS id,
+                `index_module_id` AS indexModuleId,
+                `index_module_name` AS indexModuleName,
+                `name` AS name,
+                `img_path` AS imgPath,
+                `public_time` AS publicTime
+        FROM `t_certificate`
+    </select>
+</mapper>

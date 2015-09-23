@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.economy.mapper.ContactMapper">
+
+    <select id="queryAll" resultType="Contact">
+        SELECT `id` AS id,
+                `index_module_id` AS indexModuleId,
+                `index_module_name` AS indexModuleName,
+                `address` AS address,
+                `phone` AS phone,
+                `email` AS email,
+                `contact_people` AS contactPeople
+        FROM `t_contact`
+    </select>
+
+    <select id="queryByIndexModuleId" resultType="Contact">
+        SELECT `id` AS id,
+                `index_module_id` AS indexModuleId,
+                `index_module_name` AS indexModuleName,
+                `address` AS address,
+                `phone` AS phone,
+                `email` AS email,
+                `contact_people` AS contactPeople
+        FROM `t_contact`
+        WHERE `index_module_id` = #{indexModuleId}
+    </select>
+</mapper>

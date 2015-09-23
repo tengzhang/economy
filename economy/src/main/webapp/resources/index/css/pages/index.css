@@ -1,0 +1,83 @@
+ /*cuiy modified*/
+ .headline {
+    display: block;
+    margin: 10px 0px;
+    border-bottom: 1px dotted #e4e9f0;
+}
+.servive-block-in.servive-block-colored > h5{
+    color: #fff;
+}
+.servive-block .servive-block-in i {
+    color: #fff;
+    /*font-size: 40px;*/
+    font-size: 20px;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+.desc li{
+    height: 25px;
+    line-height: 25px;
+    margin: 5px 0;
+}
+.service-alternative .service:hover i,
+.service-alternative .service:hover p,
+.service-alternative .service:hover h4,
+.service-alternative .service:hover ul li,
+.service-alternative .service:hover ul li a { 
+	color: #fff;
+}
+.info li{
+    height: 30px;
+    line-height: 30px;
+    clear: both;
+    margin-bottom: 2px;
+    margin-top: 0;
+    padding-bottom: 5px;
+}
+.info li:first-child{
+	margin-top: 15px;
+}
+.service {
+    margin-bottom: 10px;
+    overflow: hidden;
+    padding: 10px 15px 0px 15px;
+}
+.servive-block .servive-block-in{
+    margin-bottom: 10px;
+}
+.servive-block-in.servive-block-colored{
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.servive-block a:hover{
+	text-decoration: none;
+}
+.tag-box.tag-box-v3{
+	padding-bottom: 3px; 
+	padding-top: 0px;
+	margin-bottom:10px;
+}
+.service-alternative .tag-box.tag-box-v3{
+	padding-bottom: 0px; 
+	padding-top: 10px;
+}
+@media (min-width: 1200px){
+    .carousel-inner .item{
+     width: 468px;
+     height: 295px;
+    }
+}
+@media (min-width: 991px) and (max-width: 1199px){
+    .carousel-inner .item{
+     width: 384px;
+     height: 243px;
+    }
+}
+@media (max-width: 990px) {
+    .carousel-inner .item{
+        width: 100%;
+        height: 243px;
+    }
+}

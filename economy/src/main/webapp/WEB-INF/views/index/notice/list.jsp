@@ -1,0 +1,139 @@
+<%--
+  User: zhangteng
+  Date: 2014/5/2 11:11
+--%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+         pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+    <title>通知公告列表</title>
+    <jsp:include page="../common/head.jsp" />
+</head>
+
+<body>
+
+<!--=== Top ===-->
+<jsp:include page="../common/top.jsp" />
+<!--=== End Top ===-->
+
+<!--=== Header ===-->
+<jsp:include page="../common/header.jsp" />
+<!--=== End Header ===-->
+
+<!--=== Breadcrumbs ===-->
+<div class="breadcrumbs margin-bottom-40">
+    <div class="container">
+        <h1 class="pull-left">通知公告</h1>
+        <ul class="pull-right breadcrumb">
+            <li><a href="${website}">首页</a></li>
+            <li class="active">通知公告</li>
+        </ul>
+    </div>
+</div><!--/breadcrumbs-->
+<!--=== End Breadcrumbs ===-->
+
+<!--=== Content Part ===-->
+<div class="container">
+    <div class="row blog-page">
+        <!-- Left Sidebar -->
+        <%--<div class="col-md-3">
+
+            <!-- Blog Latest Tweets -->
+            <div class="blog-twitter">
+                &lt;%&ndash; 循环开始 &ndash;%&gt;
+                <c:forEach var="module" items="${indexModuleList}">
+                    <a href="${website}/index/majors/${module.name}">
+                        <div class="blog-twitter-inner">
+                            <h4>${module.name}</h4>
+                        </div>
+                    </a>
+                </c:forEach>
+                &lt;%&ndash; 循环结束 &ndash;%&gt;
+            </div>
+            <!-- End Blog Latest Tweets -->
+        </div>--%>
+        <jsp:include page="../common/leftSideBar.jsp" />
+        <!-- End Left Sidebar -->
+
+        <!-- Right Sidebar -->
+        <div class="col-md-9 md-margin-bottom-40">
+            <div class="tag-box tag-box-v3">
+                <div class="headline clearfix">
+                    <h2><i class="icon-comment color-blue"></i>&nbsp;通知公告</h2>
+                </div>
+
+                <div class="margin-bottom-20 clearfix"></div>
+
+                <ul class="list-unstyled comment">
+                    <%-- 循环开始 --%>
+                    <c:forEach var="notice" items="${noticeList}">
+                        <li class="clearfix headline">
+                            <i class="icon-circle"></i>&nbsp;
+                            <a href="${website}/index/notice/${notice.id}" moduleType="${notice.indexModuleName}">
+                                [${notice.indexModuleName}]
+                                &nbsp;${notice.title}
+                            </a>
+                            <span class="time pull-right">[<fmt:formatDate value="${notice.publicTime}" pattern="yyyy-MM-dd" />]</span>
+                        </li>
+                    </c:forEach>
+                    <%-- 循环结束 --%>
+                </ul>
+                <div class="margin-bottom-30 clearfix"></div>
+
+            </div>
+
+            <!--Pagination-->
+            <div class="text-center">
+                <ul class="pagination">
+                    <li><a href="${website}/index/notices?pageNo=${page.prevPage}">«</a></li>
+                    <c:forEach var="pageNo" items="${page.pageList}">
+                        <li ${pageNo==page.currentPage ? 'class="active"' : ''}>
+                            <a href="${website}/index/notices?pageNo=${pageNo}">${pageNo}</a>
+                        </li>
+                    </c:forEach>
+                    <li><a href="${website}/index/notices?pageNo=${page.nextPage}">»</a></li>
+                </ul>
+            </div>
+            <!--End Pagination-->
+        </div>
+        <!-- End Right Sidebar -->
+    </div><!--/row-->
+</div><!--/container-->
+<!--=== End Content Part ===-->
+
+<!--=== Footer ===-->
+<jsp:include page="../common/footer.jsp" />
+<!--=== End Footer ===-->
+
+<!--=== Copyright ===-->
+<jsp:include page="../common/copyright.jsp" />
+<!--=== End Copyright ===-->
+
+<!-- JS Global Compulsory -->
+<jsp:include page="../common/script.jsp" />
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        App.init();
+
+        $('.comment a').each(function(){
+            var $moduleType = $(this).attr('moduleType');
+            console.log($(this).attr('moduleType'));
+            if($moduleType == '双学位'){
+                $(this).prev('i').addClass('color-orange');
+            }else if($moduleType == '自考'){
+                $(this).prev('i').addClass('color-sea');
+            }else{
+                $(this).prev('i').addClass('color-blue');
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

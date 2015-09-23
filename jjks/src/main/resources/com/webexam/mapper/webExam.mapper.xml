@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webexam.mapper.WebExamMapper">
+
+    <select id="queryAll" resultType="WebExam">
+        SELECT `id` AS id,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `start_time` AS startTime,
+                `end_time` AS endTime,
+                `exam_time` AS examTime
+        FROM `t_web_exam`
+        ORDER BY `start_time` DESC
+    </select>
+
+    <select id="queryByPage" resultType="WebExam">
+        SELECT `id` AS id,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `start_time` AS startTime,
+                `end_time` AS endTime,
+                `exam_time` AS examTime
+        FROM `t_web_exam`
+        ORDER BY `start_time` DESC
+        LIMIT #{pCurrent}, #{pSize}
+    </select>
+
+    <select id="queryBySearch" resultType="WebExam">
+        SELECT `id` AS id,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `start_time` AS startTime,
+                `end_time` AS endTime,
+                `exam_time` AS examTime
+        FROM `t_web_exam`
+        WHERE `major_code` = #{search} OR `subject_code` = #{search}
+        ORDER BY `start_time` DESC
+    </select>
+
+    <select id="queryExamByMajorAndSubject" resultType="WebExam">
+        <![CDATA[
+        SELECT `id` AS id,
+                `subject_code` AS subjectCode,
+                `subject_name` AS subjectName,
+                `major_code` AS majorCode,
+                `major_name` AS majorName,
+                `start_time` AS startTime,
+                `end_time` AS endTime,
+                `exam_time` AS examTime
+        FROM `t_web_exam`
+        WHERE `major_code` = #{majorCode} AND `subject_code` = #{subjectCode}
+        AND `start_time` < #{time}
+        AND `end_time` > #{time}
+        ]]>
+    </select>
+</mapper>

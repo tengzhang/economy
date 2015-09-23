@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webexam.mapper.MajorSubjectMapper">
+
+    <resultMap id="majorSubjectResMap" type="MajorSubjectDto">
+        <id property="id" column="id" />
+        <association property="major" column="major_id" javaType="Major">
+            <id property="id" column="majorId" />
+            <result property="code" column="majorCode" />
+            <result property="name" column="majorName" />
+        </association>
+        <association property="subject" column="subject_id" javaType="Subject">
+            <id property="id" column="subjectId" />
+            <result property="code" column="subjectCode" />
+            <result property="name" column="subjectName" />
+            <result property="credit" column="subjectCredit" />
+        </association>
+    </resultMap>
+
+    <select id="queryAll" resultMap="majorSubjectResMap">
+        SELECT
+        ms.`id` AS id,
+        ms.`major_id` AS major_id,
+        ms.`subject_id` AS subject_id,
+        m.`id` AS majorId,
+        m.`code` AS majorCode,
+        m.`name` AS majorName,
+        s.`id` AS subjectId,
+        s.`code` AS subjectCode,
+        s.`name` AS subjectName,
+        s.`credit` AS subjectCredit
+        FROM `t_major_subject` AS ms, `t_major` AS m, `t_subject` AS s
+        WHERE ms.`major_id` = m.`id` AND ms.`subject_id` = s.`id`
+        ORDER BY m.`code` ASC, s.`code` ASC
+    </select>
+
+    <select id="queryByPage" resultMap="majorSubjectResMap">
+        SELECT
+        ms.`id` AS id,
+        ms.`major_id` AS major_id,
+        ms.`subject_id` AS subject_id,
+        m.`id` AS majorId,
+        m.`code` AS majorCode,
+        m.`name` AS majorName,
+        s.`id` AS subjectId,
+        s.`code` AS subjectCode,
+        s.`name` AS subjectName,
+        s.`credit` AS subjectCredit
+        FROM `t_major_subject` AS ms, `t_major` AS m, `t_subject` AS s
+        WHERE ms.`major_id` = m.`id` AND ms.`subject_id` = s.`id`
+        ORDER BY m.`code` ASC, s.`code` ASC
+        LIMIT #{pCurrent}, ${pSize}
+    </select>
+
+    <select id="querySubjectByMajor" resultType="Subject">
+        SELECT s.`id` AS id,
+                s.`code` AS CODE,
+                s.`name` AS NAME
+        FROM `t_major_subject` ms LEFT JOIN `t_subject` s ON ms.`subject_id` = s.`id`
+        WHERE ms.`major_id` = #{majorId}
+        ORDER BY s.`code` ASC
+    </select>
+</mapper>
